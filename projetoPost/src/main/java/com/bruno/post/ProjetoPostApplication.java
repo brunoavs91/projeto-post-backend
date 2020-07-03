@@ -29,17 +29,17 @@ public class ProjetoPostApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-//		// so para teste , qndo startar a app 
-//		
-//		Usuario user  = new Usuario();
-//		user.setId(1L);
-//		user.setEmail("teste@gmail.com");
-//		user.setNome("testeNome");
-//		user.setSenha("xx");
-//		user.setPerfis(new HashSet<>(Perfil.ADMIN.getCod()));
-//		user.setPosts(new ArrayList<>());
-//		
-//		usuarioRepository.save(user);
+		// so para teste , qndo startar a app 
+		
+		Usuario user  = new Usuario();
+		user.setId(1L);
+		user.setEmail("teste@gmail.com");
+		user.setNome("testeNome");
+		user.setSenha("xx");
+		user.setPerfis(new HashSet<>(Perfil.ADMIN.getCod()));
+		user.setPosts(new ArrayList<>());
+		
+		usuarioRepository.save(user);
 	}
 
 }

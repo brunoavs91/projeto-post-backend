@@ -5,14 +5,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -34,24 +35,25 @@ public class Usuario implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(name = "NOME")
+//	@Column(name = "NOME")
 	private String nome;
 	
-	@Column(name = "EMAIL")
+//	@Column(name = "EMAIL")
 	private String email;
 	
 	@JsonIgnore
-	@Column(name = "SENHA")
+//	@Column(name = "SENHA")
 	private String senha;
 	
 	@OneToMany(mappedBy = "usuario" , fetch = FetchType.LAZY)
 	private List<Post> posts;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name="PERFIS")
-	private Set<Integer> perfis = new HashSet<>();
+	@ManyToMany
+	@JoinTable(name = "USUARIO_PERFIL_ROLE", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "perfil_id") })
+	private Set<Perfil> perfis = new HashSet<>();
 	
 }
