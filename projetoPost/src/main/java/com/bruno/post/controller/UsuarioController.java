@@ -28,6 +28,17 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuario);
 	}
 	
+	/*
+	 * // @PreAuthorize("hasAnyRole('ADMIN')")
+	 * 
+	 * @RequestMapping(method = RequestMethod.GET) public
+	 * ResponseEntity<List<UsuarioDTO>> findAll() { usuarioService.findAll();
+	 * List<ClienteDTO> listaDTO = lista.stream().map(cli -> new
+	 * ClienteDTO(cli)).collect(Collectors.toList());
+	 * 
+	 * return ResponseEntity.ok().body(listaDTO); }
+	 */
+	
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@RequestBody UsuarioDTO usuarioDTO) {
 

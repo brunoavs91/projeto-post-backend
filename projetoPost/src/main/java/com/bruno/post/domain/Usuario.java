@@ -4,19 +4,19 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import javax.persistence.Column;
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.bruno.post.enums.Perfil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -51,9 +51,21 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy = "usuario" , fetch = FetchType.LAZY)
 	private List<Post> posts;
 	
-	@ManyToMany
-	@JoinTable(name = "USUARIO_PERFIL_ROLE", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "perfil_id") })
-	private Set<Perfil> perfis = new HashSet<>();
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name="USUARIO_PERFIL_ROLE")
+	private Set<Integer> perfis = new HashSet<>();
+	
+//	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	@JoinTable(name = "USUARIO_PERFIL_ROLE", joinColumns = { @JoinColumn(name = "usuario_id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "perfil_id") })
+//	private Set<Perfil> perfis = new HashSet<>();
+	
+	public Set<Perfil> getPerfis() {
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addPerfil(Perfil perfil) {
+		this.perfis.add(perfil.getCod());
+	}
 	
 }

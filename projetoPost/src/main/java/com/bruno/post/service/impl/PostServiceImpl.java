@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bruno.post.domain.Post;
 import com.bruno.post.dto.PostDTO;
 import com.bruno.post.exception.AuthorizationException;
+import com.bruno.post.repository.PostRepository;
 import com.bruno.post.repository.UsuarioRepository;
 import com.bruno.post.security.UserSS;
 import com.bruno.post.service.ImageService;
@@ -21,25 +22,30 @@ public class PostServiceImpl implements PostService{
 	
 	@Autowired
 	private UsuarioService usuarioService;
-
 	
+	@Autowired
+	private PostRepository postRepository;
 
+	@Override
 	public void insert(PostDTO postDTO, MultipartFile multipartFile) {
-		
-		
+
+//		UserSS user = UserService.authenticated();
+//		if (user == null) {
+//			throw new AuthorizationException("Acesso negado");
+//		}
+
+		Post post = fromPost(postDTO);
+		post.setImagem(uploadImagemPost(multipartFile));
+		postRepository.save(post);
+
 	}
 	
-	public void uploadImagemPost(MultipartFile multipartFile) {
+	public byte[] uploadImagemPost(MultipartFile multipartFile) {
 
-		UserSS user = UserService.authenticated();
-		if (user == null) {
-			throw new AuthorizationException("Acesso negado");
-		}
-	
-	byte[] byteImagem =	imageService.converterArquivoUpload(multipartFile);
-	
-	//implementar o restante
-	
+		return imageService.converterArquivoUpload(multipartFile);
+
+		// implementar o restante
+
 	}
 	
 	public Post fromPost(PostDTO postDTO) {
