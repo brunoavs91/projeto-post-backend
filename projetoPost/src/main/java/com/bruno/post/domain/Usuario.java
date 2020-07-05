@@ -39,14 +39,14 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-//	@Column(name = "NOME")
+	@Column(name = "NOME" , nullable = true)
 	private String nome;
 	
-	@Column(name = "EMAIL" , unique = true)
+	@Column(name = "EMAIL" , unique = true , nullable = true)
 	private String email;
 	
 	@JsonIgnore
-//	@Column(name = "SENHA")
+	@Column(name = "SENHA", nullable = true)
 	private String senha;
 	
 	@OneToMany(mappedBy = "usuario" , fetch = FetchType.LAZY)

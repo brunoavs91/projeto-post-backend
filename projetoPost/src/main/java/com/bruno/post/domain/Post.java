@@ -28,13 +28,12 @@ public class Post  implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-//	@Column(name = "ID_POST")
 	private Long id;
 	
-//	@Column(name = "COMENTARIO")
+	@Column(name = "COMENTARIO")
 	private String comentario;
 	
-//	@Column(name = "imagem")
+	@Column(name = "imagem")
 	private byte [] imagem;
 	
 	@ManyToOne

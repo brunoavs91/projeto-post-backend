@@ -11,5 +11,5 @@ public interface PostService {
 	 * @param postDTO
 	 * @param multipartFile
 	 */
-	public void insert(PostDTO postDTO, MultipartFile multipartFile);
+	public void insert(PostDTO postDTO);
 }

@@ -18,7 +18,9 @@ public class PostDTO implements Serializable{
 	
 	private String comentario;
 	
-	private byte[] imagem;
+	private String imagem;
 	
 	private Long idUsuario;
+	
+	private String email;
 }

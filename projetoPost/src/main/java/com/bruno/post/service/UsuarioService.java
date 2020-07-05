@@ -24,7 +24,7 @@ public interface UsuarioService {
 	 * @param email
 	 * @return
 	 */
-	public UsuarioDTO findByEmail(String email);
+	public Usuario findByEmail(String email);
 	
 	public List<UsuarioDTO> findAll();
 	

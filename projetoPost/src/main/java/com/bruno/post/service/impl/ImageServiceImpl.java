@@ -5,13 +5,14 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FilenameUtils;
 import org.imgscalr.Scalr;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bruno.post.exception.FileException;
@@ -35,7 +36,7 @@ public class ImageServiceImpl implements ImageService {
 //		}
 //
 //	}
-	@Override
+	
 	public byte[] converterArquivoUpload(MultipartFile uploadFile) {
 		try {
 	
@@ -47,6 +48,30 @@ public class ImageServiceImpl implements ImageService {
 			throw new FileException("Error ao ler arquivo");
 	
 		}
+	}
+
+	
+	public static String convertImagemBytesToString(byte... bytes) {
+
+		if (bytes != null) {
+
+			byte[] imagem = Base64.getUrlDecoder().decode(bytes);
+
+			return new String(bytes);
+		}
+		return null;
+	}
+
+	public static byte[] convertStringToBytes(String imagem) {
+
+		if (!StringUtils.isEmpty(imagem)) {
+
+			String encodedString = Base64.getEncoder().encodeToString(imagem.getBytes());
+
+			return encodedString.getBytes();
+		}
+		return null;
+
 	}
 	
 	public Pair<InputStream, byte[]> getInputStream(BufferedImage img, String extensao) {

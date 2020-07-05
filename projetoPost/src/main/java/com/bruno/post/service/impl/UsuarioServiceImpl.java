@@ -43,8 +43,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	}
 	
-
-	public UsuarioDTO findByEmail(String email) {
+	@Override
+	public Usuario findByEmail(String email) {
 		UserSS user = UserService.authenticated();
 
 		if (user == null || !user.hasHole(Perfil.ADMIN) && email.equals(user.getUsername())) {
@@ -52,11 +52,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 			throw new AuthorizationException("Acesso negado");
 		}
 
-		Usuario usuario = usuarioRepository.findByEmail(email)
+		return usuarioRepository.findByEmail(email)
 				.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado:" + user.getId()));
-		
-
-		return fromDTO(usuario);
 
 	}
 

@@ -10,4 +10,18 @@ public interface ImageService {
 	 * @return
 	 */
 	public byte[] converterArquivoUpload(MultipartFile uploadFile);
+	
+//	/**
+//	 * converter bytes para string
+//	 * @param bytes
+//	 * @return
+//	 */
+//	public String convertImagemBytesToString(byte... bytes);
+//	
+//	/**
+//	 * Converter string para Bytes
+//	 * @param imagem
+//	 * @return
+//	 */
+//	public byte[] convertStringToBytes(String imagem);
 }
