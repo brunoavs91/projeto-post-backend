@@ -35,19 +35,19 @@ public class ImageServiceImpl implements ImageService {
 //		}
 //
 //	}
-@Override
-public byte[] converterArquivoUpload(MultipartFile uploadFile) {
-	try {
-
-		byte[] byteArr = uploadFile.getBytes();
-		InputStream inputStream = new ByteArrayInputStream(byteArr);
-		inputStream.close();
-		return byteArr;
-	} catch (IOException e) {
-		throw new FileException("Error ao ler arquivo");
-
+	@Override
+	public byte[] converterArquivoUpload(MultipartFile uploadFile) {
+		try {
+	
+			byte[] byteArr = uploadFile.getBytes();
+			InputStream inputStream = new ByteArrayInputStream(byteArr);
+			inputStream.close();
+			return byteArr;
+		} catch (IOException e) {
+			throw new FileException("Error ao ler arquivo");
+	
+		}
 	}
-}
 	
 	public Pair<InputStream, byte[]> getInputStream(BufferedImage img, String extensao) {
 		try {

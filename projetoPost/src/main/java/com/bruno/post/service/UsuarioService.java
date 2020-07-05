@@ -18,6 +18,14 @@ public interface UsuarioService {
 	 * Buscar todos usuarios
 	 * @return
 	 */
+	
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public UsuarioDTO findByEmail(String email);
+	
 	public List<UsuarioDTO> findAll();
 	
 	/**

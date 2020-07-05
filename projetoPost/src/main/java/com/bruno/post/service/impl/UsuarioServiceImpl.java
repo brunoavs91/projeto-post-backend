@@ -2,6 +2,7 @@ package com.bruno.post.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,13 +11,17 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bruno.post.config.SecurityConfig;
 import com.bruno.post.domain.Post;
 import com.bruno.post.domain.Usuario;
 import com.bruno.post.dto.PostDTO;
 import com.bruno.post.dto.UsuarioDTO;
+import com.bruno.post.enums.Perfil;
+import com.bruno.post.exception.AuthorizationException;
 import com.bruno.post.exception.DataIntegrityException;
 import com.bruno.post.exception.ObjectNotFoundException;
 import com.bruno.post.repository.UsuarioRepository;
+import com.bruno.post.security.UserSS;
 import com.bruno.post.service.UsuarioService;
 
 @Service
@@ -37,6 +42,24 @@ public class UsuarioServiceImpl implements UsuarioService {
 		}
 
 	}
+	
+
+	public UsuarioDTO findByEmail(String email) {
+		UserSS user = UserService.authenticated();
+
+		if (user == null || !user.hasHole(Perfil.ADMIN) && email.equals(user.getUsername())) {
+
+			throw new AuthorizationException("Acesso negado");
+		}
+
+		Usuario usuario = usuarioRepository.findByEmail(email)
+				.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado:" + user.getId()));
+		
+
+		return fromDTO(usuario);
+
+	}
+
 
 	@Override
 	public List<UsuarioDTO> findAll() {
@@ -79,6 +102,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 			usuarioDTO.setId(usuario.getId());
 			usuarioDTO.setNome(usuario.getNome());
 			usuarioDTO.setEmail(usuario.getEmail());
+			usuarioDTO.setSenha(null);
 			usuarioDTO.setPostsDTO(new ArrayList<>());
 
 			if (usuario.getPosts() != null && !usuario.getPosts().isEmpty()) {
@@ -106,6 +130,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 			usuario.setId(usuarioDTO.getId());
 			usuario.setNome(usuarioDTO.getNome());
 			usuario.setEmail(usuarioDTO.getEmail());
+			usuario.setPerfis(new HashSet<>());
+			//um mandar numero e pegar o perfil pelo numero
+			usuario.addPerfil(Perfil.valueOf(usuarioDTO.getRole().toUpperCase()));
+			usuario.setSenha(SecurityConfig.bCryptPasswordEncoder().encode(usuarioDTO.getSenha()));
 			usuario.setPosts(new ArrayList<>());
 
 			if (usuarioDTO.getPostsDTO() != null && !usuarioDTO.getPostsDTO().isEmpty()) {

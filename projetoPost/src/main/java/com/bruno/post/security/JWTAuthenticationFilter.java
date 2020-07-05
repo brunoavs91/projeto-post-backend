@@ -2,6 +2,7 @@ package com.bruno.post.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.bruno.post.dto.CredenciaisDTO;
@@ -22,6 +24,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	private AuthenticationManager authenticationManager;
 
 	private JWTUtil jwtUtil;
+	
+	private final static Logger LOGGER = Logger.getLogger(JWTAuthenticationFilter.class.getName());
 	
 	public JWTAuthenticationFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
 		super();
@@ -70,6 +74,24 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader("access-control-expose-headers" , "Authorization");
 	}
 
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException failed)
+			throws IOException, ServletException {
+		SecurityContextHolder.clearContext();
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("Authentication request failed: " + failed.toString(), failed);
+			logger.debug("Updated SecurityContextHolder to contain null Authentication");
+			
+		}
+		
+		logger.debug("Authentication request failed: " + failed.toString(), failed);
+		logger.debug("Updated SecurityContextHolder to contain null Authentication");
+		LOGGER.info(failed.toString());
+//		LOGGER.log(Level.INFO,failed.fillInStackTrace());
+		
+	}
+	
 	
 }

@@ -54,7 +54,7 @@ public class SecurityConfig extends  WebSecurityConfigurerAdapter {
 			"/auth/forgot/**"
 
 	};
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 

@@ -30,7 +30,7 @@ public class DBServiceImpl implements DBService {
 		user.setNome("testeNome");
 		user.setSenha(SecurityConfig.bCryptPasswordEncoder().encode("123"));
 		user.setPerfis(new HashSet<>());
-		user.getPerfis().add(Perfil.ADMIN);
+		user.addPerfil(Perfil.ADMIN);
 		user.setPosts(new ArrayList<>());
 
 		usuarioRepository.save(user);

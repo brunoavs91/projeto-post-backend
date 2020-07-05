@@ -17,5 +17,9 @@ public class UsuarioDTO implements Serializable{
 	
 	private String email;
 	
+	private String senha;
+	
+	private String role;
+	
 	private List<PostDTO> postsDTO;
 }

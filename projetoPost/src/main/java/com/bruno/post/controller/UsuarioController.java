@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bruno.post.domain.Usuario;
@@ -57,5 +58,12 @@ public class UsuarioController {
 
 		return ResponseEntity.noContent().build();
 	}
+	
+	@RequestMapping(value = "/email", method = RequestMethod.GET)
+	public ResponseEntity<UsuarioDTO> find(@RequestParam(value = "value") String email) {
+		UsuarioDTO clienteDTO = usuarioService.findByEmail(email);
+		return ResponseEntity.ok().body(clienteDTO);
+	}
+
 	 
 }
