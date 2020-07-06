@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -33,8 +34,12 @@ public class Post  implements Serializable{
 	@Column(name = "COMENTARIO")
 	private String comentario;
 	
+	
 	@Column(name = "imagem")
 	private byte [] imagem;
+	
+	@Column(name = "fileName")
+	private String fileName;
 	
 	@ManyToOne
 	@JoinColumn(name = "USUARIO_ID")

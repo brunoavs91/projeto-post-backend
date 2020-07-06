@@ -1,9 +1,16 @@
 package com.bruno.post.service.impl;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FilenameUtils;
+import org.hibernate.secure.spi.IntegrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +20,7 @@ import com.bruno.post.domain.Usuario;
 import com.bruno.post.dto.PostDTO;
 import com.bruno.post.exception.AuthorizationException;
 import com.bruno.post.exception.DataIntegrityException;
+import com.bruno.post.exception.FileException;
 import com.bruno.post.exception.ObjectNotFoundException;
 import com.bruno.post.repository.PostRepository;
 import com.bruno.post.security.UserSS;
@@ -33,15 +41,17 @@ public class PostServiceImpl implements PostService{
 	private PostRepository postRepository;
 
 	@Override
-	public void insert(PostDTO postDTO) {
-
-//		UserSS user = UserService.authenticated();
-//		if (user == null) {
-//			throw new AuthorizationException("Acesso negado");
-//		}
+	public void insert(PostDTO postDTO, MultipartFile file) {
 		
+		String extensao = FilenameUtils.getExtension(file.getOriginalFilename());
+		postDTO.setFileName(file.getOriginalFilename());
+
+		BufferedImage img = ImageServiceImpl.getJpgImageFromFile(file);
+		postDTO.setImagem(ImageServiceImpl.getInputStream(img, extensao));
+		
+
 		Post post = fromPost(postDTO);
-//		post.setImagem(uploadImagemPost(multipartFile));
+
 		postRepository.save(post);
 
 	}
@@ -78,8 +88,8 @@ public class PostServiceImpl implements PostService{
 		Post post = new Post();
 		post.setId(postDTO.getId());
 		post.setComentario(postDTO.getComentario());
-		post.setImagem(ImageServiceImpl.convertStringToBytes(postDTO.getImagem()));
-
+		post.setImagem(post.getImagem());
+		post.setFileName(postDTO.getFileName());
 		post.setUsuario(buscarUsuarioByPost(postDTO.getEmail()));
 
 		return post;
@@ -91,7 +101,8 @@ public class PostServiceImpl implements PostService{
 		postDTO.setId(post.getId());
 		postDTO.setComentario(post.getComentario());
 		postDTO.setIdUsuario(post.getUsuario() != null ? post.getUsuario().getId() : null);
-		postDTO.setImagem(ImageServiceImpl.convertImagemBytesToString(post.getImagem()));
+		postDTO.setImagem(post.getImagem());
+		postDTO.setFileName(post.getFileName());
 		return postDTO;
 
 	}

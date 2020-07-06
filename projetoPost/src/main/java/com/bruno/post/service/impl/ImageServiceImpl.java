@@ -21,27 +21,37 @@ import com.bruno.post.service.ImageService;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-//	public BufferedImage getJpgImageFromFile(MultipartFile uploadFile) {
-//		// pegar a extensao do arquivo
+	public static  BufferedImage  getJpgImageFromFile(MultipartFile uploadFile) {
+		// pegar a extensao do arquivo
 //		String extensao = FilenameUtils.getExtension(uploadFile.getOriginalFilename());
-//		
-//
-//		try {
-//			BufferedImage img = ImageIO.read(uploadFile.getInputStream());
-//			
-//			
-//			return img;
-//		} catch (IOException e) {
-//			throw new FileException("Error ao ler arquivo");
-//		}
-//
-//	}
+
+		try {
+			BufferedImage img = ImageIO.read(uploadFile.getInputStream());
+			
+			return img;
+		} catch (IOException e) {
+			throw new FileException("Error ao ler arquivo");
+		}
+
+	}
 	
+	
+	public static byte[] getInputStream(BufferedImage img, String extensao) {
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(img, extensao, os);
+			return os.toByteArray();
+		} catch (IOException e) {
+			throw new FileException("Erro ao ler arquivo");
+		}
+		
+	}
 	public byte[] converterArquivoUpload(MultipartFile uploadFile) {
 		try {
 	
 			byte[] byteArr = uploadFile.getBytes();
 			InputStream inputStream = new ByteArrayInputStream(byteArr);
+			inputStream.read(byteArr);
 			inputStream.close();
 			return byteArr;
 		} catch (IOException e) {
@@ -74,16 +84,6 @@ public class ImageServiceImpl implements ImageService {
 
 	}
 	
-	public Pair<InputStream, byte[]> getInputStream(BufferedImage img, String extensao) {
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			ImageIO.write(img, extensao, os);
-			return Pair.of(new ByteArrayInputStream(os.toByteArray()), os.toByteArray());
-		} catch (IOException e) {
-			throw new FileException("Erro ao ler arquivo");
-		}
-
-	}
 	
 	public BufferedImage cropSquare(BufferedImage sourceImg) {
 		int min = (sourceImg.getHeight() <= sourceImg.getWidth() ? sourceImg.getHeight() : sourceImg.getWidth());

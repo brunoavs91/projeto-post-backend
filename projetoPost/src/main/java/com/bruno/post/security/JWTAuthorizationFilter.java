@@ -46,6 +46,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 					
 					chain.doFilter(request, response);
 				}
+				
+			}else if(!StringUtils.isEmpty(servletPath) && servletPath.equals("/usuarios")) {
+				chain.doFilter(request, response);
 			} else if (!StringUtils.isEmpty(servletPath) && servletPath.equals("/auth/login") && Objects.nonNull(header) && header.startsWith("Basic ")) {
 				chain.doFilter(request, response);
 			} else if (!StringUtils.isEmpty(servletPath) && servletPath.equals("/auth/refresh_token")) {
