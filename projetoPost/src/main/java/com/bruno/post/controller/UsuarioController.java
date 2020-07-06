@@ -2,6 +2,7 @@ package com.bruno.post.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,7 +51,7 @@ public class UsuarioController {
 	
 	
 
-	  
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 
@@ -58,6 +59,7 @@ public class UsuarioController {
 
 		return ResponseEntity.noContent().build();
 	}
+	
 	
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
 	public ResponseEntity<UsuarioDTO> find(@RequestParam(value = "value") String email) {
